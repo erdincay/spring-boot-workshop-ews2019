@@ -71,8 +71,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
             .csrf().disable()
             .authorizeRequests()
-            .antMatchers("/my-open-endpoint**").permitAll()
-            .antMatchers(HttpMethod.GET, "/my-closed-endpoint**").hasAnyRole("MYROLE")
+            .antMatchers("/my-open-endpoint/**").permitAll()
+            .antMatchers(HttpMethod.GET, "/my-closed-endpoint/**").hasAnyRole("MYROLE")
             .anyRequest().authenticated()
             .and()
             .httpBasic()
