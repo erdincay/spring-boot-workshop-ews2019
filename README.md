@@ -117,7 +117,7 @@ für die HTTP-Status-Codes.
 
 ### Aufgabe 2.5: Erstelle und teste Fehlerbehandlung
 
-Es soll ein Exception-Handler `de.ops.springbootworkshop.application.rest.PetShopExceptionHandler` erstellt werden, 
+Es soll ein globaler Controller-Advice mit Exception-Handlern `de.ops.springbootworkshop.application.rest.PetShopExceptionHandler` erstellt werden, 
 welcher von `ResponseEntityExceptionHandler` ableitet. Für die Aufgabe soll mit 
 `de.ops.springbootworkshop.application.rest.model.ApiError` eine einheitliche Datenstruktur zur Ausgabe von 
 verschiedenen Fehlern verwendet werden. Der `ApiError` soll dabei den Fehlertext der Exception beinhalten.
