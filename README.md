@@ -1,4 +1,4 @@
-# Spring Boot 2 Workshop 2.0
+# Spring Boot 2 Workshop 2.1
 
 ## Vorausetzungen
 
