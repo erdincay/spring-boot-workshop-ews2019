@@ -1,4 +1,4 @@
-# Spring Boot Workshop 2.0
+# Spring Boot Workshop 2.1
 
 ## Aufgabenkomplex 5
 
