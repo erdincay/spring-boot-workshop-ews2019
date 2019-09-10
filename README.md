@@ -50,6 +50,12 @@ mittels `Map#values()` zurückgegeben werden.
 | Response-Body   | `Iterable<Pet>` vom Content-Type `application/json` |
 | Exception       | -                                                   |
 
+**_BEISPIEL REQUEST:_**
+```bash
+curl -X GET http://localhost:8080/petshop/pets \
+     -H "Accept:application/json"
+```
+
 **_HINWEIS:_** Standardmäßig wird im positiven Fall der HTTP-Status-Code `HttpStatus#OK` zurückgegeben.
 
 Teste den neuen Endpunkt mittels SoapUI oder einem Browser.
@@ -68,7 +74,6 @@ wenn bereits ein Haustier mit dem gleichen Namen existiert.
 | Response-Body   | `Pet`  vom Content-Type `application/json`                             |
 | Exception       | `PetAlreadyExistsException` wenn `Pet` mit dem Namen bereits existiert |
 
-
 ```java
 public abstract class PetShopApiException extends RuntimeException {
     // super constructors omitted
@@ -79,6 +84,14 @@ public abstract class PetShopApiException extends RuntimeException {
 public class PetAlreadyExistsException extends PetShopApiException {
     // super constructors omitted
 }
+```
+
+**_BEISPIEL REQUEST:_**
+```bash
+curl -X POST http://localhost:8080/petshop/pets \
+     -H "Content-Type: application/json" \
+     -H "Accept:application/json" \
+     -d '{"name":"Rex", "type":"Hund", "birthDay": "2018-10-13", "price": 750}'
 ```
 
 **_HINWEIS:_** Damit ein Methodenparameter als Request-Body erkannt wird muss dieser mit `@RequestBody` annotiert werden.
@@ -104,6 +117,11 @@ wenn kein Haustier unter dem angegebenen Namen existiert.
 public class PetNotExistsException extends PetShopApiException {
     // super constructors omitted
 }
+```
+
+**_BEISPIEL REQUEST:_**
+```bash
+curl -X DELETE http://localhost:8080/petshop/pets/Rex
 ```
 
 **_HINWEIS:_** Damit ein Methodenparameter als Path-Variable erkannt wird, muss dieser mit `@PathVariable` annotiert werden.
