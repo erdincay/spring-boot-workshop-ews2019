@@ -3,95 +3,58 @@
 ## Aufgabenkomplex 6
 
 Der Aufgabenkomplex befasst sich mit der Absicherung der Anwendung mit JWT durch Spring-Security. Ziel ist es, den `PetShopRestController` mit einer
-Authentifizierung und Autorisierung mit erweiterten Boardmitteln von Spring-Security umzusetzen.
+Authentifizierung und Autorisierung mit erweiterten Boardmitteln von Spring-Security umzusetzen. 
+
+zu diesem Aufgabenkomplex wurde bereits eine `de.osp.springworkshop.application.config.SecurityConfig` hinzugefügt.
+Diese entspricht im Ken der `SecurityConfig` aus dem Aufgabenkomplex 5.
+Abweichend wird kein In-Memory-Realm für die Definition der Benutzer verwendet.
+Ferner wird anstelle der Basic Authentication ein Security Filter `de.osp.springbootworkshop.application.rest.JwtAuthorizationFilter` konfiguriert.
+Durch den Security Filter soll die Authentifikation durchgeführt werden, dabei soll die Extraktion des Namens und die Rollen des Benutzers für den das JWT Token 
+ausgestellt wurde erfolgen.
+
+Der bestehende REST-Controller `de.osp.springbootworkshop.application.rest.PetShopRestController` bei den Endpoint-Methoden um `java.security.Principal` als Argument
+und ein logging dessen Namens erweitert.
 
 **_HINWEIS:_** Durch das Hinzufügen der Abhängigkeit `spring-boot-starter-security` in der pom.xml werden per default alle
 vorhandenen Rest-Endpoints im Projekt gesichert. Der Standardbenutzer lautet "user", das Passwort wird bei jedem Start
 der Applikation generiert und auf die Konsole geloggt.
 
-### Aufgabe 5.1: Erstellen einer Security-Konfiguration
 
-Es soll eine Konfiguration `de.osp.springbootworkshop.application.config.SecurityConfig` erstellt werden, 
-welche von `WebSecurityConfigurerAdapter` ableitet.
+### Aufgabe 6.1: Komplettiere und teste den Security Filter
 
+Es soll der Security Filter `de.osp.springbootworkshop.application.rest.JwtAuthorizationFilter` kompletiert werden.
 
-### Aufgabe: 5.2: Erstelle Benutzer im In-Memory-Realm
-
-In der `SecurityConfig` soll die Methode `WebSecurityConfigurerAdapter#configure(AuthenticationManagerBuilder)` überschrieben werden. 
-In der neuen Methode sollen mit Hilfe von `AuthenticationManagerBuilder` Benutzer in einem In-Memory-Realm angelegt werden. 
-Dabei soll der Benutzername, das Passwort und Role(n) gesetzt werden.
-
-Es sollen die folgenden Benutzer angelegt werden:
-
-| Benutzer   | Passwort         | Rolle(n)   |
-|:-----------|:-----------------|:-----------|
-| `admin`    | `{noop}admin`    | `ADMIN`    |
-| `customer` | `{noop}customer` | `CUSTOMER` |
-| `supplier` | `{noop}supplier` | `SUPPLIER` |
-
-
-**_BEISPIEL:_**
-```java
-// annotations omitted
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication().withUser("myuser").password("{noop}mypassword").roles("MYROLE");
-    }
+**_BEISPIEL JWT:_**
+```
+{
+  "alg": "HS256",
+  "typ": "JWT"
 }
+.
+{
+  "sub": "test",
+  "iat": 1516239022,
+  "roles": ["ADMIN"]
+}
+.
+secret
 ```
 
-**_DOKUMENTATION:_**
-[AuthenticationManagerBuilder Java Doc](https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/config/annotation/authentication/builders/AuthenticationManagerBuilder.html)
-
-**_HINWEIS:_** Bei der Angabe des Passworts sollte als Prefix `{noop}` verwendet werden, wenn das Passwort im Klartext hinterlegt ist. 
-Damit wird der `PasswordEncoder` für Klartext verwendet und keine Operation (wie z.B. MD5 oder SHA-256) auf den darauf folgenden
-String angewendet.
+**_HINWEIS:_** JWT können mit Hilfe von [jwt.io](https://jwt.io/) enkodiert und dekodiert werden.
 
 
-### Aufgabe 5.3: Erstelle und teste Absicherung von Endpoints
-
-In der `SecurityConfig` soll die Methode `WebSecurityConfigurerAdapter#configure(HttpSecurity)` überschrieben werden, um 
-die Absicherung von HTTP-Endpoints anpassen zu können. Mit Hilfe von `HttpSecurity` sollen die HTTP-Endpoints von `/actuator` und `/h2-console` 
-weiterhin ohne Absicherung erreichbar sein. Die HTTP-Endpoints vom `PetShopRestController` sollen
-hingegen mit HTTP-Basic-Auth abgesichert werden und es soll ein zustandsloses Session-Management verwendet werden.
-
-| HTTP-Methode | Ressource              | Rolle(n)            |
-|:-------------|:-----------------------|:--------------------|
-| GET          | `/petshop/pets`        | `ADMIN`, `CUSTOMER` |
-| POST         | `/petshop/pets`        | `ADMIN`             |
-| DELETE       | `/petshop/pets/{name}` | `ADMIN`             |
-
-**_BEISPIEL:_**
-```java
-// annotations omitted
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http
-            .csrf().disable()
-            .authorizeRequests()
-            .antMatchers("/my-open-endpoint/**").permitAll()
-            .antMatchers(HttpMethod.GET, "/my-closed-endpoint/**").hasAnyRole("MYROLE")
-            .anyRequest().authenticated()
-            .and()
-            .httpBasic()
-            .and()
-            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-    }
-}
-
+**_BEISPIEL REQUEST:_**
+```bash
+curl -X GET http://localhost:8080/petshop/pets \
+     -H "Accept:application/json" \
+     -H "Authorization:Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0IiwiaWF0IjoxNTE2MjM5MDIyLCJyb2xlcyI6WyJBRE1JTiJdfQ.cyCLHQWkQH3MvtvjYhtZZKRhX6gLUzVR_QMBGNvQH2s"
 ```
+
 
 **_DOKUMENTATION:_** [Spring Boot HTTP Security](https://docs.spring.io/spring-security/site/docs/current/reference/htmlsingle/#jc-httpsecurity),
 [HttpSecurity Java Doc](https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/config/annotation/web/builders/HttpSecurity.html)
 
-**_HINWEIS:_** Die relative Pfadangabe der jeweiligen Resource erfolgt in der ANT-Pfad-Notation. Verwende `?` um ein 
-beliebiges Zeichen zu matchen. Verwende `*` um keins, eins oder mehrere Zeichen zu matchen. 
-Verwende `**` um keins, eins oder mehrere Sub-Resourcen im Pfad zu matchen.
-
-
-### Zusatzaufgabe: Erstelle und teste Web-MVC-Test hinsichtlich Security
+### Zusatzaufgabe: Erstelle und teste Web-MVC-Test hinsichtlich Security mit JWT
 
 Der `PetShopRestController` soll hinsichtlich Security getestet werden für die folgenden Szenarien:
 
@@ -147,7 +110,7 @@ public class PetShopRestControllerSecurityTest {
 [SecurityMockMvcRequestPostProcessors Java Doc](https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/test/web/servlet/request/SecurityMockMvcRequestPostProcessors.html)
 
 **_HINWEIS:_** Wenn im Web-MVC-Test eine Authentifizierung gegen einen Endpoint erfolgen soll, z.B. mit HTTP-Basic-Auth, muss beim Bauen 
-des Requests `MockHttpServletRequestBuilder#with(RequestPostProcessor)` aufgerufen und  
+des Requests `MockHttpServletRequestBuilder#with(RequestPostProcessor)` aufgerufen und
 `SecurityMockMvcRequestPostProcessors#httpBasic(String, String)` verwendet werden. Wenn dagegen
 `SecurityMockMvcRequestPostProcessors#user(String)` aufgerufen wird, wird dieser Benutzer bereits als erfolgreich authentifiziert angesehen 
 und ggf. invalide Credentials ignoriert.

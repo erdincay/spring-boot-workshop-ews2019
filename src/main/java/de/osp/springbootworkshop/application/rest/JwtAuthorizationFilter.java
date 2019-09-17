@@ -26,6 +26,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import static org.slf4j.LoggerFactory.getLogger;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
@@ -60,6 +61,8 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
             LOG.warn("received request with no HTTP Header {}", AUTHORIZATION);
             return failure();
         }
+
+        LOG.info("received request with HTTP header {} as {}", AUTHORIZATION, header);
 
         if (!header.startsWith("Bearer ")) {
             LOG.warn("received request with HTTP header {} but not as 'Bearer' token", AUTHORIZATION);
@@ -97,10 +100,13 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
         try {
             Claim rolesClaim = decoded.getClaim("roles");
+
             List<String> roles = rolesClaim.asList(String.class);
 
-            for(String role : roles) {
-                authorities.add(new SimpleGrantedAuthority(ROLE_PREFIX + role));
+            if(roles != null) {
+                for(String role : roles) {
+                    authorities.add(new SimpleGrantedAuthority(ROLE_PREFIX + role));
+                }
             }
         } catch (JWTDecodeException e) {
             LOG.warn("received request with HTTP header {} and as 'Bearer' token but the 'roles' claim cannot be decoded", AUTHORIZATION);
