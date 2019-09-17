@@ -2,7 +2,7 @@
 
 ## Aufgabenkomplex 5
 
-Der Aufgabenkomplex befasst sich mit der Absicherung der Anwendung mit Spring-Security. Ziel ist es, den `PetShopRestController` mit einer
+Der Aufgabenkomplex befasst sich mit der Absicherung der Anwendung mit Basic Auth durch Spring-Security. Ziel ist es, den `PetShopRestController` mit einer
 Authentifizierung und Autorisierung mit Boardmitteln von Spring-Security umzusetzen.
 
 **_HINWEIS:_** Durch das Hinzufügen der Abhängigkeit `spring-boot-starter-security` in der pom.xml werden per default alle
