@@ -22,4 +22,5 @@ enthält die Vorbedingungen und der andere die Lösung.
 | Aufgabenkomplex 2 | `Aufgabenkomplex2`, `Aufgabenkomplex2_loesung` | Die Anwendung wird um eine REST-API, einschließlich Fehlerbehandlung, erweitert.                 |
 | Aufgabenkomplex 3 | `Aufgabenkomplex3`, `Aufgabenkomplex3_loesung` | Die Anwendung wird um einen Domain-Service erweitert.                                            |
 | Aufgabenkomplex 4 | `Aufgabenkomplex4`, `Aufgabenkomplex4_loesung` | Die Anwendung wird um eine Persistierung mit der SQL-Datenbank H2 erweitert.                     |
-| Aufgabenkomplex 5 | `Aufgabenkomplex5`, `Aufgabenkomplex5_loesung` | Die Anwendung wird um eine Absicherung der REST-API erweitert.                                   |
+| Aufgabenkomplex 5 | `Aufgabenkomplex5`, `Aufgabenkomplex5_loesung` | Die Anwendung wird um eine Absicherung der REST-API mit Basic Auth erweitert.                    |
+| Aufgabenkomplex 6 | `Aufgabenkomplex6`, `Aufgabenkomplex6_loesung` | Die Anwendung wird um eine Absicherung der REST-API mit JWT erweitert.                           |
