@@ -9,6 +9,7 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.constraints.NotNull;
+import java.security.Principal;
 
 /**
  * @author Denny
@@ -24,18 +25,18 @@ public class PetShopRestController {
     }
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public Iterable<Pet> listPets() {
+    public Iterable<Pet> listPets(Principal principal) {
         return service.listPets();
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public Pet createPet(@RequestBody @Validated @NotNull final Pet pet) {
+    public Pet createPet(@RequestBody @Validated @NotNull final Pet pet, Principal principal) {
        return service.createPet(pet);
     }
 
     @DeleteMapping("/{name}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deletePet(@PathVariable @Validated @NotNull final String name) {
+    public void deletePet(@PathVariable @Validated @NotNull final String name, Principal principal) {
         service.deletePet(name);
     }
 }

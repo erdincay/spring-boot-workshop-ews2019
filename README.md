@@ -1,9 +1,9 @@
 # Spring Boot Workshop 2.1
 
-## Aufgabenkomplex 5
+## Aufgabenkomplex 6
 
-Der Aufgabenkomplex befasst sich mit der Absicherung der Anwendung mit Spring-Security. Ziel ist es, den `PetShopRestController` mit einer
-Authentifizierung und Autorisierung mit Boardmitteln von Spring-Security umzusetzen.
+Der Aufgabenkomplex befasst sich mit der Absicherung der Anwendung mit JWT durch Spring-Security. Ziel ist es, den `PetShopRestController` mit einer
+Authentifizierung und Autorisierung mit erweiterten Boardmitteln von Spring-Security umzusetzen.
 
 **_HINWEIS:_** Durch das Hinzufügen der Abhängigkeit `spring-boot-starter-security` in der pom.xml werden per default alle
 vorhandenen Rest-Endpoints im Projekt gesichert. Der Standardbenutzer lautet "user", das Passwort wird bei jedem Start
