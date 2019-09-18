@@ -26,7 +26,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import static org.slf4j.LoggerFactory.getLogger;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
@@ -47,14 +46,14 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
                                     HttpServletResponse response,
                                     FilterChain chain) throws IOException, ServletException {
         if (requestMatcher.matches(request)) {
-            Authentication authentication = extractSubjectFromJwt(request);
+            Authentication authentication = doAuthenticate(request);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
 
         chain.doFilter(request, response);
     }
 
-    private Authentication extractSubjectFromJwt(final HttpServletRequest request) {
+    private Authentication doAuthenticate(final HttpServletRequest request) {
         String header = request.getHeader(AUTHORIZATION);
 
         if (StringUtils.isEmpty(header)) {
