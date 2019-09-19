@@ -121,7 +121,7 @@ Der zuvor ausimplementierte Security Filter `de.osp.springbootworkshop.applicati
   "roles": ["ADMIN"]
 }
 .
-secret
+<Signature mit HS256 Algorithmus und Secret "secret">
 ```
 
 
