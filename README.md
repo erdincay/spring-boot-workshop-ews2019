@@ -5,17 +5,17 @@
 Der Aufgabenkomplex befasst sich mit der Absicherung der Anwendung mit JWT durch Spring-Security. Ziel ist es, den `PetShopRestController` mit einer
 Authentifizierung und Autorisierung mit erweiterten Boardmitteln von Spring-Security umzusetzen. 
 
-zu diesem Aufgabenkomplex wurde bereits eine `de.osp.springworkshop.application.config.SecurityConfig` hinzugefügt.
-Diese entspricht im Ken der `SecurityConfig` aus dem Aufgabenkomplex 5.
-Abweichend wird kein In-Memory-Realm für die Definition der Benutzer verwendet.
-Ferner wird anstelle der Basic Authentication ein Security Filter `de.osp.springbootworkshop.application.rest.JwtAuthorizationFilter` konfiguriert.
-Durch den Security Filter soll die Authentifikation durchgeführt werden, dabei soll die Extraktion des Namens und die Rollen des Benutzers für den das JWT Token 
-ausgestellt wurde erfolgen.
+Zu diesem Aufgabenkomplex wurde bereits eine `de.osp.springworkshop.application.config.SecurityConfig` hinzugefügt.
+Diese entspricht im Kern der `SecurityConfig` aus dem Aufgabenkomplex 5.
+Abweichend wird jedoch kein In-Memory-Realm für die Definition der Benutzer verwendet, sondern
+anstelle der Basic Authentication ein Security Filter `de.osp.springbootworkshop.application.rest.JwtAuthorizationFilter` konfiguriert.
+Durch den Security Filter soll die Authentifizierung durchgeführt werden. Dabei soll die Extraktion des Namens und der Rollen des Benutzers (für den das JWT Token 
+ausgestellt wurde) erfolgen.
 
-Der bestehende REST-Controller `de.osp.springbootworkshop.application.rest.PetShopRestController` bei den Endpoint-Methoden um `java.security.Principal` als Argument
-und ein logging dessen Namens erweitert.
+Der bestehende REST-Controller `de.osp.springbootworkshop.application.rest.PetShopRestController` wurde bei den Endpoint-Methoden um `java.security.Principal` als Argument
+und ein Logging dessen Namens erweitert.
 
-Desweiteren wurde im Projekt die Abhängigkeit `com.auth0:java-jwt` hinzugefügt, die im Aufgabenkomplex verwendet wird, um mit den JWT zu arbeiten.
+Desweiteren wurde im Projekt die Abhängigkeit `com.auth0:java-jwt` hinzugefügt, die im Aufgabenkomplex verwendet wird, um mit JWT zu arbeiten.
 
 **_HINWEIS:_** Durch das Hinzufügen der Abhängigkeit `spring-boot-starter-security` in der pom.xml werden per default alle
 vorhandenen Rest-Endpoints im Projekt gesichert. Der Standardbenutzer lautet "user", das Passwort wird bei jedem Start
@@ -24,11 +24,11 @@ der Applikation generiert und auf die Konsole geloggt.
 
 ### Aufgabe 6.1: Komplettiere den Security Filter
 
-Es soll der Security Filter `de.osp.springbootworkshop.application.rest.JwtAuthorizationFilter` kompletiert werden, so das folgende Schritte implementiert werden:
+Es soll der Security Filter `de.osp.springbootworkshop.application.rest.JwtAuthorizationFilter` komplettiert werden, sodass folgende Schritte implementiert werden:
 1. Der HTTP Header `Authorization` muss vom Request abgefragt werden
-2. Der HTTP Header `Authorization` muss existiert, nicht leer ist und das Präfix `Bearer` besitzten
+2. Der HTTP Header `Authorization` muss existieren, nicht leer sein und das Präfix `Bearer` besitzen
 3. Das Token muss aus dem HTTP Header `Authorization` extrahiert werden (zwischen `Bearer` und dem eigentlichen Token befindet sich ein Leerzeichen)
-4. Das Tokens muss anhand des Algorithmus `HMAC256` mit dem Secret `secret` mit Hilfe von `JWTVerifier` verifiziert werden werden
+4. Das Tokens muss anhand des Algorithmus `HMAC256` mit dem Secret `secret` mit Hilfe von `JWTVerifier` verifiziert werden
 5. Das Token muss mit Hilfe von `DecodedJWT` dekodiert werden
 6. Das Subject muss aus dem dekodierten Token gelesen werden als `String`
 7. Die Rollen müssen aus dem dekodierten Token gelesen werden als `List<String>`
@@ -94,7 +94,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
 ### Aufgabe 6.2: teste den Security Filter
 
-Der zuvor ausimplementierte Security Filter `de.osp.springbootworkshop.application.rest.JwtAuthorizationFilter`  soll anhand folgender Szenarien getestet werden.
+Der zuvor implementierte Security Filter `de.osp.springbootworkshop.application.rest.JwtAuthorizationFilter` soll anhand folgender Szenarien getestet werden.
 
 | REST-Endpoint       | Szenario                                                        | Erwartung                                            |
 |:--------------------|:----------------------------------------------------------------|:-----------------------------------------------------|
@@ -106,7 +106,7 @@ Der zuvor ausimplementierte Security Filter `de.osp.springbootworkshop.applicati
 | `GET /petshop/pets` | Token mit beliebigen Nutzer in Claim `sub` und Rolle `ADMIN`    | HTTP-Status-Code `200` bzw. `HttpStatus#OK`          |
 
 
-**_HINWEIS:_** Tokens können mittels können mit Hilfe von [jwt.io](https://jwt.io/) enkodiert und dekodiert werden.
+**_HINWEIS:_** Tokens können mit Hilfe von [jwt.io](https://jwt.io/) enkodiert und dekodiert werden.
 
 **_BEISPIEL JWT:_**
 ```
